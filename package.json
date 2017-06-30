@@ -1,0 +1,16 @@
+{
+  "name": "akez",
+  "version": "1.0.0",
+  "description": "a good djs music bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.1.0",
+    "node-opus": "^0.2.6",
+    "ytdl-core": "^0.14.4"
+  }
+}
