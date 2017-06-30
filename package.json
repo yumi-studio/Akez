@@ -2,6 +2,10 @@
   "name": "akez",
   "version": "1.0.0",
   "description": "a good djs music bot",
+  "engines": {
+    "node": "7.0.0",
+    "npm": "3.10.8"
+  },
   "main": "index.js",
   "scripts": {
     "test": "node index.js"
