@@ -18,17 +18,15 @@ const commands = {
     let dispatcher;
     queue[msg.guild.id].playing = true;
 
-    console.log(queue);
     (function play(song) {
-      console.log(song);
       if (song === undefined) return msg.channel.send('Queue is empty').then(() => {
         queue[msg.guild.id].playing = false;
         msg.member.voiceChannel.leave();
       });
       msg.channel.send(`Playing: **${song.title}** as requested by: **${song.requester}**`);
       dispatcher = msg.guild.voiceConnection.playStream(yt(song.url, { audioonly: true }), { passes : tokens.passes });
-      let collector = msg.channel.createCollector(m => m);
-      collector.on('message', m => {
+      let collector = msg.channel.createMessageCollector(m => m);
+      collector.on('collect', m => {
         if (m.content.startsWith(tokens.prefix + 'pause')) {
           msg.channel.send('paused').then(() => {dispatcher.pause();});
         } else if (m.content.startsWith(tokens.prefix + 'resume')){
@@ -67,7 +65,7 @@ const commands = {
     });
   },
   'add': (msg) => {
-    let url = msg.content.split(' ')[1];
+    let url = msg.command[1];
     if (url == '' || url === undefined) return msg.channel.send(`You must add a YouTube video url, or id after ${tokens.prefix}add`);
     msg.channel.send("Retrieving video info...");
     yt.getInfo(url, (err, info) => {
@@ -98,7 +96,7 @@ client.on('ready', () => {
 
 client.on('message', msg => {
   if (!msg.content.toLowerCase().startsWith(tokens.prefix)) return;
-  msg.content = msg.content.slice(tokens.prefix.length);
-  if (commands.hasOwnProperty(msg.content.split(' ')[0])) commands[msg.content.split(' ')[0]](msg);
+  msg.command = msg.content.slice(tokens.prefix.length).split(' ');
+  if (commands.hasOwnProperty(msg.command[0])) commands[msg.command[0]](msg);
 });
 client.login(tokens.d_token);
